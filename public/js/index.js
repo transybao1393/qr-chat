@@ -9,13 +9,16 @@ const socket = io();
     const url = window.location.href;
     const shortenName = url.split('/')[3];
     let shortenLink = '';
+    let ipAdress = '';
 
     //- can be use later
     socket.on('first-login', function(data) {
       console.log('qrShortenName on first login', data.dataReturned.urlShortenName);
       qrShortenName = data.dataReturned.urlShortenName;
-      let ipAdress = data.dataReturned.currentIP;
-      shortenLink = 'http://' + ipAdress + ':3000/' + qrShortenName;
+      ipAdress = 'http://' + data.dataReturned.currentIP + ':3000/';
+      shortenLink = ipAdress + qrShortenName;
+      $('.qrContent').attr("href", shortenLink);
+      $('.qrContent').text(shortenLink);
       if(shortenName !== '')
       {
         qrShortenName = shortenName;
@@ -31,6 +34,9 @@ const socket = io();
         console.log('you are not joining any room');
       }else{
         qrShortenName = shortenName;
+        if (confirm("You want to host a group chat?") == true) {
+          window.open(ipAdress, '_blank');
+        }
         console.log('you are joining room with shorten name...', shortenName);
       }
     });
