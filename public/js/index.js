@@ -1,5 +1,6 @@
 const users = {};
-const socket = io();
+// const socket = io();
+const socket = io('http://nodejs:3000');
 
   //- jquery
   $(document).ready(function() {
@@ -15,7 +16,8 @@ const socket = io();
     socket.on('first-login', function(data) {
       console.log('qrShortenName on first login', data.dataReturned.urlShortenName);
       qrShortenName = data.dataReturned.urlShortenName;
-      ipAdress = 'http://' + data.dataReturned.currentIP + ':3000/';
+      console.log('data.dataReturned.currentIP', data.dataReturned.currentIP);
+      ipAdress = 'http://' + data.dataReturned.currentIP + '/';
       shortenLink = ipAdress + qrShortenName;
       $('.qrContent').attr("href", shortenLink);
       $('.qrContent').text(shortenLink);

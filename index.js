@@ -2,11 +2,12 @@ var express = require('express');
 var app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
-const redis = require('socket.io-redis');
 const {connect} = require('./connection');
 connect();
+// rethinkDBConnection();
 const UrlController = require('./controller/UrlController');
-// io.adapter(redis({ host: 'localhost', port: 6379 }));
+const redis = require('socket.io-redis');
+io.adapter(redis({ host: 'redis', port: 6379 }));
 
 io.on('connection', async (socket) => {
     let currentRoomName = '';
