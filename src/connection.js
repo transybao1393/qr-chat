@@ -1,8 +1,5 @@
 'use strict'
 const mongoose = require('mongoose');
-//- rethinkdb area
-// var r = require('rethinkdb');
-// var promise = r.connect({db: 'stably'});
 
 module.exports.connect = async function()
 {
@@ -27,30 +24,3 @@ module.exports.connect = async function()
         console.info('Database disconnected...');
     });
 }
-
-//- rethinkdb connection
-// module.exports.rethinkDBConnection = function() {
-//     var connection = null;
-    
-//     r.connect( {host: 'localhost', port: 28015}, function(err, conn) {
-//         if (err) throw err;
-//         r.dbList()
-//         .contains('stably')
-//         .do(databaseExists =>
-//             r.branch(databaseExists, { dbs_created: 0 }, r.dbCreate('stably'))
-//         )
-//         .run(conn);
-
-//         r.db('stably').table("url").insert({
-//             "uIP": "12345",
-//             bao: 1236,
-//             "title": "Lorem ipsum3333",
-//             "class": "Dolor sit amet 2222"
-//         }).run(conn)
-//         connection = conn;
-//     });
-// }
-
-// function rethinkDBCallback(result) {
-//     console.log('result...', result);
-// }
