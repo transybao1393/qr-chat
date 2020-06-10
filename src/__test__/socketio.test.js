@@ -2,13 +2,7 @@ var io = require('socket.io-client');
 
 describe('Suite of unit tests', function() {
 
-    // var socket;
-
-    var server,
-        options ={
-            transports: ['websocket'],
-            'force new connection': true
-        };
+    var socket;
 
     beforeEach(function(done) {
         // Setup

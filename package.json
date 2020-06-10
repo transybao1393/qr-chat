@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --testPathPattern=__test__/*",
-    "start": "node index.js"
+    "test": "jest --testPathPattern=src/__test__/*",
+    "start": "node src/index.js"
   },
   "keywords": [],
   "author": "",

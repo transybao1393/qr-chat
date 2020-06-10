@@ -15,8 +15,7 @@ module.exports.createShortenLink = async function(currentIP) {
             return {
                 urlShortenName: map(urlModel, 'urlShortenName')[0],
                 urlRoomName: map(urlModel, 'urlRoomName')[0]
-            }; //- get room name in database
-            //- existed
+            };
         } else {
             const roomName = Str.random(13);
             const urlShortenName = Str.random(6);

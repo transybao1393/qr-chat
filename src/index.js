@@ -6,8 +6,8 @@ const {connect} = require('./connection');
 connect();
 // rethinkDBConnection();
 const UrlController = require('./controller/UrlController');
-const redis = require('socket.io-redis');
-io.adapter(redis({ host: 'redis', port: 6379 }));
+// const redis = require('socket.io-redis');
+// io.adapter(redis({ host: 'redis', port: 6379 }));
 
 io.on('connection', async (socket) => {
     let currentRoomName = '';
