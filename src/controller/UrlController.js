@@ -14,7 +14,8 @@ module.exports.createShortenLink = async function(currentIP) {
         if(size(urlModel) > 0) {
             return {
                 urlShortenName: map(urlModel, 'urlShortenName')[0],
-                urlRoomName: map(urlModel, 'urlRoomName')[0]
+                urlRoomName: map(urlModel, 'urlRoomName')[0],
+                currentIP
             };
         } else {
             const roomName = Str.random(13);
@@ -22,16 +23,15 @@ module.exports.createShortenLink = async function(currentIP) {
             await UrlModel.UrlModel.create({
                 urlIP: currentIP,
                 urlShortenName: urlShortenName,
-                urlRoomName: roomName
+                urlRoomName: roomName,
             });
             return {
                 urlShortenName,
-                urlRoomName: roomName
+                urlRoomName: roomName,
+                currentIP
             };
-            //- not existed
         }
     } catch (error) {
-        //- throw error
         console.error(error);
     }
     return {};
@@ -44,7 +44,6 @@ module.exports.checkShortenLink = async function(shortenName) {
         }).select('urlRoomName'); 
         return map(urlModel, 'urlRoomName')[0];
     } catch (error) {
-        //- throw error
         console.error(error);
     }
     return {};
