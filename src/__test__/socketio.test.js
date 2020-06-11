@@ -1,16 +1,18 @@
 var io = require('socket.io-client');
 
-describe('Suite of unit tests', function() {
+describe('SocketIO Unit Test', function() {
 
     var socket;
+    var options = {
+        'reconnection delay' : 0,
+        'reopen delay' : 0,
+        'force new connection' : true
+    };
+    var socketURL = 'http://localhost:3000';
 
     beforeEach(function(done) {
         // Setup
-        socket = io.connect('http://localhost:3000', {
-            'reconnection delay' : 0
-            , 'reopen delay' : 0
-            , 'force new connection' : true
-        });
+        socket = io.connect(socketURL, options);
         socket.on('connect', function() {
             console.log('worked...');
             done();
@@ -33,29 +35,93 @@ describe('Suite of unit tests', function() {
         done();
     });
 
-    describe('basic socket.io example', () => {
-        it('should communicate', (done) => {
-            // once connected, emit Hello World
-            socket.emit('echo', 'Hello World');
-            socket.on('echo', (message) => {
-                // Check that the message matches
-                expect(message).toBe('Hello World');
+    describe('when IP address detected and returned', () => {
+        it('Should return object data', (done) => {
+            var initData = {
+                urlShortenName: '6Yhn0p', //- random 6 digit string
+                currentIP: '0.0.0.0'
+            };
+            socket.emit('first-login', initData);
+            setTimeout(async () => {
+                await socket.on('first-login', (data) => {
+                    expect(typeof data).toBe('object');
+                    expect(typeof data).not.toBe('function');
+                    expect(data.urlShortenName).toEqual(initData.urlShortenName);
+                    expect(data.currentIP).toEqual(initData.currentIP);
+                });
                 done();
-            });
-            socket.on('connection', (mySocket) => {
-                expect(mySocket).toBeDefined();
-            });
-            done();
+            }, 500);
         });
-        it('should communicate with waiting for socket.io handshakes', (done) => {
-            // Emit sth from Client do Server
-            socket.emit('examlpe', 'some messages');
-            // Use timeout to wait for socket.io server handshakes
+
+        it('Should send message on group chat', (done) => {
+            var initData = {
+                message: 'hello',
+                nickname: 'transybao'
+            };
+            socket.emit('group chat', initData);
+            setTimeout(async () => {
+                await socket.on('group chat', (data) => {
+                    expect(typeof data).toBe('object');
+                    expect(typeof data).not.toBe('function');
+                    expect(data.message).toEqual('hello');
+                });
+                done();
+            }, 500);
+        });
+
+        it('Should catch the message from client', (done) => {
+            var initData = {
+                message: 'hello',
+                nickname: 'transybao'
+            };
+            socket.emit('group chat', initData);
+            setTimeout(async () => {
+                await socket.on('group chat', (data) => {
+                    expect(typeof data).toBe('object');
+                    expect(typeof data).not.toBe('function');
+                    expect(data.message).toEqual('hello');
+                });
+                done();
+            }, 500);
+        });
+
+        it('Should response message with intended data object', (done) => {
+            var initData = {
+                message: 'hello',
+                nickname: 'transybao'
+            };
+            socket.emit('group chat', initData);
+
             setTimeout(() => {
-                // Put your server side expect() here
-                done();
-            }, 50);
+                var groupChatPromise = new Promise((resolve, reject) => {
+                    resolve('resolve catch group chat data from client...');
+                });
+    
+                var chatResponsePromise = new Promise((resolve, reject) => {
+                    resolve(socket.on('chat_response', chatReponseCallback));
+                });
+    
+                var chatReponseCallback = (data) => {
+                    return data;
+                };
+    
+                Promise.all([groupChatPromise, chatResponsePromise])
+                .then((results) => {
+                    var chatResponseData = results[1];
+                    expect(typeof chatResponseData).toBe('object');
+                    expect(typeof chatResponseData).not.toBe('function');
+                    expect(chatResponseData.from).toEqual(initData.nickname);
+                    expect(chatResponseData.message).toEqual(initData.message);
+                    done();
+                })
+                .catch((err) => {
+                    console.log(err);
+                    done();
+                });
+            }, 500);
+            
         });
+
     });
 
 });

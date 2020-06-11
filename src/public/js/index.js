@@ -14,9 +14,7 @@ const socket = io();
 
     //- can be use later
     socket.on('first-login', function(data) {
-      console.log('qrShortenName on first login', data.dataReturned.urlShortenName);
       qrShortenName = data.dataReturned.urlShortenName;
-      console.log('data.dataReturned.currentIP', data.dataReturned.currentIP);
       ipAdress = 'http://' + data.dataReturned.currentIP + ':3000/';
       shortenLink = ipAdress + qrShortenName;
       $('.qrContent').attr("href", shortenLink);
@@ -33,13 +31,11 @@ const socket = io();
       if(shortenName == '') {
         $('#myModal').css('display', 'block');
         generateBarCode(shortenLink);
-        console.log('you are not joining any room');
       }else{
         qrShortenName = shortenName;
         if (confirm("You want to host a group chat?") == true) {
           window.open(ipAdress, '_blank');
         }
-        console.log('you are joining room with shorten name...', shortenName);
       }
     });
 
@@ -64,7 +60,6 @@ const socket = io();
         var message = $('#comment').val();
         //- send private chat
         var nickname = $('#nickname').val();
-        console.log('nickname when send', nickname);
         socket.emit('group chat', {message, nickname});
         $('#conversation').append(singleSendSide(message, new Date()));
         $('#comment').val('');
@@ -74,7 +69,6 @@ const socket = io();
 
     //- receive private chat
     socket.on('chat_response', function(data) {
-      console.log('someone chat with you', data);
       $('#conversation').append(singleReceiveSide(data.from, data.message, data.dateTime));
     });
 
@@ -142,7 +136,6 @@ window.onclick = function(event) {
 
 function generateBarCode(qrCodeData)
 {
-  // console.log('data received from server', qrCodeData);
   var url = 'https://api.qrserver.com/v1/create-qr-code/?data=' + qrCodeData + '&amp;size=400x400';
   $('#barcode').attr('src', url);
 }
