@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 
 module.exports.connect = async function()
 {
-    let connectionString = 'mongodb://transybao:transybao93@ds161780.mlab.com:61780/stably';
+    let mLabConnection = 'mongodb://transybao:transybao93@ds161780.mlab.com:61780/stably';
+    let connectionString = process.env.MONGODB_URI || mLabConnection;
     let options = {
         useNewUrlParser: true,
         autoIndex: true,

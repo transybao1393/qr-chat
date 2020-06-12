@@ -15,7 +15,8 @@ const socket = io();
     //- can be use later
     socket.on('first-login', function(data) {
       qrShortenName = data.dataReturned.urlShortenName;
-      ipAdress = 'http://' + data.dataReturned.currentIP + ':3000/';
+      // ipAdress = 'http://' + data.dataReturned.currentIP + ':3000/';
+      ipAdress = 'http://localhost:3000/';
       shortenLink = ipAdress + qrShortenName;
       $('.qrContent').attr("href", shortenLink);
       $('.qrContent').text(shortenLink);
